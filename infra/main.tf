@@ -106,6 +106,23 @@ resource "aws_iam_policy" "github_runner_policy" {
             "ec2:CreateAction" = "RunInstances"
           }
         }
+      },
+      {
+        Effect   = "Allow"
+        Action   = [
+          "s3:ListBucket",
+          "s3:PutObject",
+          "s3:GetObject",
+          "s3:DeleteObject",
+          "s3:ListMultipartUploadParts",
+          "s3:ListObjectVersions",
+          "s3:ListObjects",
+          "s3:ListObjectsV2",
+          "s3:GetObjectTagging"
+        ]
+        Resource = [
+          "arn:aws:s3:::064592191516/*"
+        ]
       }
     ]
   })
