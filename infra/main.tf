@@ -1,5 +1,5 @@
 provider "aws" {
-  profile = "064592191516" 
+  profile = "064592191516"
   region  = "us-east-1"
 }
 
@@ -58,11 +58,11 @@ resource "aws_iam_role" "github_runner_role" {
   name = "github-runner-role"
 
   assume_role_policy = jsonencode({
-    Version = "2012-10-17"
+    Version   = "2012-10-17"
     Statement = [
       {
-        Action = "sts:AssumeRole"
-        Effect = "Allow"
+        Action    = "sts:AssumeRole"
+        Effect    = "Allow"
         Principal = {
           Service = "ec2.amazonaws.com"
         }
@@ -76,51 +76,39 @@ resource "aws_iam_policy" "github_runner_policy" {
   description = "Policy for GitHub Actions runner"
 
   policy = jsonencode({
-    Version = "2012-10-17"
+    Version   = "2012-10-17"
     Statement = [
       {
-        Effect = "Allow"
-        Action = [
+        "Action" : [
           "ec2:RunInstances",
           "ec2:TerminateInstances",
           "ec2:DescribeInstances",
           "ec2:DescribeInstanceStatus"
-        ]
-        Resource = "*"
+        ],
+        "Effect" : "Allow",
+        "Resource" : "*"
       },
       {
-        Effect = "Allow"
-        Action = [
-          "ec2:ReplaceIamInstanceProfileAssociation",
-          "ec2:AssociateIamInstanceProfile",
-          "iam:PassRole"
-        ]
-        Resource = "*"
-      },
-      {
-        Effect   = "Allow"
-        Action   = "ec2:CreateTags"
-        Resource = "*"
-        Condition = {
-          StringEquals = {
-            "ec2:CreateAction" = "RunInstances"
+        "Action" : "ec2:CreateTags",
+        "Condition" : {
+          "StringEquals" : {
+            "ec2:CreateAction" : "RunInstances"
           }
-        }
+        },
+        "Effect" : "Allow",
+        "Resource" : "*"
       },
       {
-        Effect   = "Allow"
-        Action   = [
+        "Effect" : "Allow",
+        "Action" : [
           "s3:ListBucket",
           "s3:PutObject",
           "s3:GetObject",
           "s3:DeleteObject",
           "s3:ListMultipartUploadParts",
-          "s3:ListObjectVersions",
-          "s3:ListObjects",
-          "s3:ListObjectsV2",
           "s3:GetObjectTagging"
-        ]
-        Resource = [
+        ],
+        "Resource" : [
           "arn:aws:s3:::064592191516/*"
         ]
       }
