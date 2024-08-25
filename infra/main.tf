@@ -113,7 +113,7 @@ resource "aws_instance" "github_runner" {
   ami                  = data.aws_ami.latest_amazon_linux.id
   instance_type        = "t3.medium"
   subnet_id            = "subnet-3fa0ce75"
-  security_groups      = [aws_security_group.github_runner_sg.name]
+  security_groups      = [aws_security_group.github_runner_sg.id]
   key_name             = aws_key_pair.github_runner_key.key_name
   iam_instance_profile = aws_iam_instance_profile.github_runner_instance_profile.name
   user_data            = file("setup_runner.sh")
