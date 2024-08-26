@@ -28,7 +28,6 @@
       file:
         path: /home/ec2-user/actions-runner
         state: directory
-        mode: '0755'
 
     - name: Download GitHub Actions Runner
       get_url:
@@ -46,13 +45,14 @@
 
     - name: Configure GitHub Actions Runner
       become: no
-      command: /home/ec2-user/actions-runner/config.sh --unattended --url https://github.com/wilsonify/FreshInstall --token {{ lookup('env', 'GITHUB_TOKEN') }} --labels 064592191516
+      command: /home/ec2-user/actions-runner/config.sh --unattended --url https://github.com/wilsonify/FreshInstall --token $GITHUB_TOKEN --labels 064592191516
 
     - name: Install GitHub Actions Runner as a service
+      become: yes
       command: >
         /home/ec2-user/actions-runner/svc.sh install
 
     - name: Start GitHub Actions Runner service
-      become: no
+      become: yes
       command: >
         /home/ec2-user/actions-runner/svc.sh start
