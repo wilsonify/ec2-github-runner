@@ -17,37 +17,30 @@
         state: started
         enabled: yes
 
+    - name: Ensure pip is installed
+      command: python3 -m ensurepip
+
+    - name: Install boto3 using pip
+      command: python3 -m pip install boto3
+
     - name: Download GitHub Actions Runner
       get_url:
         url: "https://github.com/actions/runner/releases/download/v2.319.1/actions-runner-linux-x64-2.319.1.tar.gz"
         dest: "/home/ec2-user/actions-runner/actions-runner-linux-x64-2.319.1.tar.gz"
 
     - name: Verify GitHub Actions Runner tarball SHA256 checksum
-      command: >
-        echo "3f6efb7488a183e291fc2c62876e14c9ee732864173734facc85a1bfb1744464  /home/ec2-user/actions-runner/actions-runner-linux-x64-2.319.1.tar.gz" |
-        sha256sum -c -
-      register: checksum_result
-      failed_when: checksum_result.rc != 0
+      command: echo "3f6efb7488a183e291fc2c62876e14c9ee732864173734facc85a1bfb1744464  /home/ec2-user/actions-runner/actions-runner-linux-x64-2.319.1.tar.gz" | sha256sum -c -
 
     - name: Extract GitHub Actions Runner tarball
       unarchive:
         src: "/home/ec2-user/actions-runner/actions-runner-linux-x64-2.319.1.tar.gz"
         dest: "/home/ec2-user/actions-runner/"
-        remote_src: yes
 
     - name: Configure GitHub Actions Runner
       become: no
-      command: >
-        /home/ec2-user/actions-runner/config.sh
-        --unattended
-        --url https://github.com/wilsonify/FreshInstall
-        --token {{ lookup('env', 'GITHUB_TOKEN') }}
-        --labels self-hosted Linux X64 064592191516
-      environment:
-        GITHUB_TOKEN: "{{ lookup('env', 'GITHUB_TOKEN') }}"
+      command: /home/ec2-user/actions-runner/config.sh --unattended --url https://github.com/wilsonify/FreshInstall --token {{ lookup('env', 'GITHUB_TOKEN') }} --labels 064592191516
 
     - name: Install GitHub Actions Runner as a service
-      become: no
       command: >
         /home/ec2-user/actions-runner/svc.sh install
 
@@ -55,11 +48,3 @@
       become: no
       command: >
         /home/ec2-user/actions-runner/svc.sh start
-
-    - name: Ensure pip is installed
-      command: python3 -m ensurepip
-      become: no
-
-    - name: Install boto3 using pip
-      command: python3 -m pip install boto3
-      become: no
