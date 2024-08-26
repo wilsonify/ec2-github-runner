@@ -109,6 +109,7 @@ resource "aws_iam_policy" "github_runner_policy" {
           "s3:GetObjectTagging"
         ],
         "Resource" : [
+          "arn:aws:s3:::064592191516",
           "arn:aws:s3:::064592191516/*"
         ]
       }
