@@ -106,11 +106,11 @@ resource "aws_iam_policy" "github_runner_policy" {
           "s3:GetObject",
           "s3:DeleteObject",
           "s3:ListMultipartUploadParts",
-          "s3:GetObjectTagging"
+          "s3:GetObjectTagging",
+          "s3:HeadObject"
         ],
         "Resource" : [
-          "arn:aws:s3:::064592191516",
-          "arn:aws:s3:::064592191516/*"
+          "arn:aws:s3:::*"
         ]
       }
     ]
