@@ -1,8 +1,13 @@
 
 
 deploy:
-	terraform init && terraform plan && terraform apply -auto-approve
+	terraform init && \
+	terraform plan && \
+	terraform apply -auto-approve
 
 setup:
+	# update address in inventory file
 	ansible-playbook -i inventory.ini setup-runner-playbook.yaml
+	# add token into /etc/environment and reboot
+
 
