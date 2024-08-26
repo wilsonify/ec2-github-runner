@@ -8,6 +8,7 @@
           - docker
           - git
           - python3
+          - nano
         state: present
         update_cache: yes
 
@@ -23,6 +24,12 @@
     - name: Install boto3 using pip
       command: python3 -m pip install boto3
 
+    - name: Create actions-runner directory
+      file:
+        path: /home/ec2-user/actions-runner
+        state: directory
+        mode: '0755'
+
     - name: Download GitHub Actions Runner
       get_url:
         url: "https://github.com/actions/runner/releases/download/v2.319.1/actions-runner-linux-x64-2.319.1.tar.gz"
@@ -35,6 +42,7 @@
       unarchive:
         src: "/home/ec2-user/actions-runner/actions-runner-linux-x64-2.319.1.tar.gz"
         dest: "/home/ec2-user/actions-runner/"
+        remote_src: yes
 
     - name: Configure GitHub Actions Runner
       become: no
